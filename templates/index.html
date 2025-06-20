@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zambia Data Collection Tool</title>
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Header -->
+        <header class="py-4 mb-4 border-bottom">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h1 class="h3 mb-0">
+                            <i class="fas fa-globe-africa text-info me-2"></i>
+                            Zambia Data Collection Tool
+                        </h1>
+                        <p class="text-muted mb-0">Collect and export Zambia-specific data from international sources</p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <span class="badge bg-secondary">
+                            <i class="fas fa-flag me-1"></i>
+                            Zambia Focus
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="container">
+            <div class="row">
+                <!-- Data Selection Panel -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-cog me-2"></i>
+                                Data Collection Settings
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="dataForm">
+                                <!-- Data Source Selection -->
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-database me-1"></i>
+                                        Data Source
+                                    </label>
+                                    <select class="form-select" id="dataSource" required>
+                                        <option value="">Select a data source...</option>
+                                        <option value="world_bank">
+                                            <i class="fas fa-university"></i>
+                                            World Bank
+                                        </option>
+                                        <option value="imf">
+                                            <i class="fas fa-chart-line"></i>
+                                            International Monetary Fund (IMF)
+                                        </option>
+                                        <option value="usaid">
+                                            <i class="fas fa-hands-helping"></i>
+                                            USAID
+                                        </option>
+                                        <option value="un">
+                                            <i class="fas fa-globe"></i>
+                                            UN Agencies
+                                        </option>
+                                        <option value="afdb">
+                                            <i class="fas fa-landmark"></i>
+                                            African Development Bank
+                                        </option>
+                                        <option value="zambian_stats">
+                                            <i class="fas fa-flag"></i>
+                                            Zambian Statistics Office
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <!-- Data Type Selection -->
+                                <div class="mb-4">
+                                    <label class="form-label fw-bold">
+                                        <i class="fas fa-tags me-1"></i>
+                                        Data Type
+                                    </label>
+                                    <select class="form-select" id="dataType" required>
+                                        <option value="">Select a data type...</option>
+                                        <option value="population">
+                                            <i class="fas fa-users"></i>
+                                            Population
+                                        </option>
+                                        <option value="health">
+                                            <i class="fas fa-heartbeat"></i>
+                                            Health
+                                        </option>
+                                        <option value="education">
+                                            <i class="fas fa-graduation-cap"></i>
+                                            Education
+                                        </option>
+                                        <option value="economy">
+                                            <i class="fas fa-chart-bar"></i>
+                                            Economy
+                                        </option>
+                                        <option value="agriculture">
+                                            <i class="fas fa-seedling"></i>
+                                            Agriculture
+                                        </option>
+                                        <option value="mining">
+                                            <i class="fas fa-mountain"></i>
+                                            Mining
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <!-- Advanced Options -->
+                                <div class="mb-4">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm w-100" data-bs-toggle="collapse" data-bs-target="#advancedOptions">
+                                        <i class="fas fa-cog me-1"></i>
+                                        Advanced Options
+                                    </button>
+                                    <div class="collapse mt-3" id="advancedOptions">
+                                        <div class="card card-body">
+                                            <div class="mb-3">
+                                                <label class="form-label">Date Range</label>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <input type="number" class="form-control" id="startYear" placeholder="Start Year" min="2000" max="2024" value="2020">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <input type="number" class="form-control" id="endYear" placeholder="End Year" min="2000" max="2024" value="2023">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Comparison Mode</label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="compareMultipleSources">
+                                                    <label class="form-check-label" for="compareMultipleSources">
+                                                        Compare data from multiple sources
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Data Format</label>
+                                                <select class="form-select" id="dataFormat">
+                                                    <option value="csv">CSV File</option>
+                                                    <option value="excel">Excel File (requires pandas)</option>
+                                                    <option value="json">JSON Data</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Email Report</label>
+                                                <input type="email" class="form-control" id="emailAddress" placeholder="Enter email address to receive report">
+                                                <div class="form-text">Optional: Leave blank to download only</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Action Buttons -->
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary btn-lg" id="fetchBtn">
+                                        <i class="fas fa-download me-2"></i>
+                                        Fetch Data
+                                    </button>
+                                    <div class="btn-group w-100" role="group">
+                                        <button type="button" class="btn btn-success" id="downloadBtn" disabled>
+                                            <i class="fas fa-file-excel me-2"></i>
+                                            Download
+                                        </button>
+                                        <button type="button" class="btn btn-info" id="emailBtn" disabled>
+                                            <i class="fas fa-envelope me-2"></i>
+                                            Send Email
+                                        </button>
+                                        <button type="button" class="btn btn-warning" id="visualizeBtn" disabled>
+                                            <i class="fas fa-chart-line me-2"></i>
+                                            Visualize
+                                        </button>
+                                        <button type="button" class="btn btn-secondary" id="compareBtn" disabled>
+                                            <i class="fas fa-balance-scale me-2"></i>
+                                            Compare
+                                        </button>
+                                    </div>
+                                    <button type="button" class="btn btn-outline-primary" id="bulkFetchBtn">
+                                        <i class="fas fa-layer-group me-2"></i>
+                                        Fetch All Sources
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Panel -->
+                <div class="col-lg-8">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-table me-2"></i>
+                                Data Results
+                            </h5>
+                            <div id="statusBadge"></div>
+                        </div>
+                        <div class="card-body">
+                            <!-- Loading State -->
+                            <div id="loadingState" class="text-center py-5" style="display: none;">
+                                <div class="spinner-border text-primary mb-3" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <h6>Fetching data from <span id="loadingSource"></span>...</h6>
+                                <p class="text-muted">This may take a few moments</p>
+                            </div>
+
+                            <!-- Empty State -->
+                            <div id="emptyState" class="text-center py-5">
+                                <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                                <h5>No Data Yet</h5>
+                                <p class="text-muted">Select a data source and type, then click "Fetch Data" to begin</p>
+                            </div>
+
+                            <!-- Error State -->
+                            <div id="errorState" class="text-center py-5" style="display: none;">
+                                <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                                <h5>Data Fetch Failed</h5>
+                                <p class="text-muted" id="errorMessage"></p>
+                                <button class="btn btn-outline-secondary" onclick="clearResults()">
+                                    <i class="fas fa-redo me-1"></i>
+                                    Try Again
+                                </button>
+                            </div>
+
+                            <!-- Results Container -->
+                            <div id="resultsContainer" style="display: none;">
+                                <!-- Stats Cards -->
+                                <div class="row mb-3">
+                                    <div class="col-md-3">
+                                        <div class="card bg-primary bg-opacity-10 border-primary">
+                                            <div class="card-body py-2">
+                                                <small class="text-muted">Records Found</small>
+                                                <div class="h4 mb-0" id="recordCount">0</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-info bg-opacity-10 border-info">
+                                            <div class="card-body py-2">
+                                                <small class="text-muted">Data Source</small>
+                                                <div class="h6 mb-0" id="dataSourceInfo">-</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-success bg-opacity-10 border-success">
+                                            <div class="card-body py-2">
+                                                <small class="text-muted">Date Range</small>
+                                                <div class="h6 mb-0" id="dateRangeInfo">-</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="card bg-warning bg-opacity-10 border-warning">
+                                            <div class="card-body py-2">
+                                                <small class="text-muted">Last Updated</small>
+                                                <div class="h6 mb-0" id="lastFetchTime">-</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- View Toggle -->
+                                <div class="row mb-3">
+                                    <div class="col-12">
+                                        <div class="btn-group w-100" role="group">
+                                            <input type="radio" class="btn-check" name="viewMode" id="tableView" checked>
+                                            <label class="btn btn-outline-primary" for="tableView">
+                                                <i class="fas fa-table me-1"></i>Table View
+                                            </label>
+                                            <input type="radio" class="btn-check" name="viewMode" id="chartView">
+                                            <label class="btn btn-outline-primary" for="chartView">
+                                                <i class="fas fa-chart-bar me-1"></i>Chart View
+                                            </label>
+                                            <input type="radio" class="btn-check" name="viewMode" id="summaryView">
+                                            <label class="btn btn-outline-primary" for="summaryView">
+                                                <i class="fas fa-list me-1"></i>Summary View
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Table View -->
+                                <div id="tableViewContainer">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped table-hover" id="resultsTable">
+                                            <thead class="table-dark">
+                                                <tr id="tableHeaders"></tr>
+                                            </thead>
+                                            <tbody id="tableBody"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Chart View -->
+                                <div id="chartViewContainer" style="display: none;">
+                                    <canvas id="dataChart" width="400" height="200"></canvas>
+                                </div>
+
+                                <!-- Summary View -->
+                                <div id="summaryViewContainer" style="display: none;">
+                                    <div class="row" id="summaryCards"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-5 py-4 border-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8">
+                        <p class="text-muted mb-0">
+                            <i class="fas fa-info-circle me-1"></i>
+                            This tool collects publicly available data about Zambia from international organizations.
+                        </p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <small class="text-muted">
+                            <i class="fas fa-clock me-1"></i>
+                            Last updated: <span id="lastUpdated">-</span>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
